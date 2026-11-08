@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../../">
+<head>
+[[head]]
+</head>
+<body style="[[theme_style]]">
+[[header]]
+
+  <main>
+    <!-- Сторінка підтримки: її адреса — це «Support URL» для App Store Connect -->
+    <section class="policy-hero">
+      <div class="policy-hero-inner">
+        <p class="crumbs"><a href="index.html" data-i18n="policy.back">{{policy.back}}</a></p>
+        <img class="app-icon-xl" src="media/icon.webp" alt="" width="88" height="88">
+        <p class="app-name" data-i18n="@.name">{{@.name}}</p>
+        <h1 data-i18n="support.title">{{support.title}}</h1>
+        <div style="margin-top:12px">[[status_chip]]</div>
+      </div>
+    </section>
+
+    <div class="policy-wrap">
+      <article class="policy support">
+        <p class="lead" data-i18n="support.lead">{{support.lead}}</p>
+        <p class="support-cta"><a class="btn btn-primary" href="[[mailto]]" data-i18n="support.write">{{support.write}}</a></p>
+        <p class="policy-url" style="text-align:center">octo.technology.dev@gmail.com</p>
+
+        <h2 data-i18n="support.include">{{support.include}}</h2>
+        <ul>
+          <li data-i18n="support.inc1">{{support.inc1}}</li>
+          <li data-i18n="support.inc2">{{support.inc2}}</li>
+          <li data-i18n="support.inc3">{{support.inc3}}</li>
+        </ul>
+
+        <h2 data-i18n="support.subs_t">{{support.subs_t}}</h2>
+        <p data-i18n="support.subs_d">{{support.subs_d}}</p>
+        <ul>
+          <li><a href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener" data-i18n="support.subs_ios">{{support.subs_ios}}</a></li>
+          <li><a href="https://play.google.com/store/account/subscriptions" target="_blank" rel="noopener" data-i18n="support.subs_android">{{support.subs_android}}</a></li>
+        </ul>
+
+        <h2 data-i18n="support.refund_t">{{support.refund_t}}</h2>
+        <p data-i18n="support.refund_d">{{support.refund_d}}</p>
+        <ul>
+          <li><a href="https://reportaproblem.apple.com/" target="_blank" rel="noopener" data-i18n="support.refund_ios">{{support.refund_ios}}</a></li>
+          <li><a href="https://play.google.com/store/account/orderhistory" target="_blank" rel="noopener" data-i18n="support.refund_android">{{support.refund_android}}</a></li>
+        </ul>
+
+        <h2 data-i18n="support.parents_t">{{support.parents_t}}</h2>
+        <p data-i18n="support.parents_d">{{support.parents_d}}</p>
+
+        <h2 data-i18n="support.privacy_t">{{support.privacy_t}}</h2>
+        <p data-i18n="support.privacy_d">{{support.privacy_d}}</p>
+        <ul>
+[[policy_links]]
+        </ul>
+      </article>
+    </div>
+  </main>
+
+[[footer]]
+</body>
+</html>

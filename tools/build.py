@@ -21,6 +21,7 @@ import json
 import re
 import sys
 import time
+import urllib.parse
 from pathlib import Path
 
 from bs4 import BeautifulSoup
@@ -38,8 +39,11 @@ GP_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#34a853" d="
            '<path fill="#fbbc04" d="m16.8 8.6-3.4 3.4 3.4 3.4 3.9-2.2c.8-.5.8-1.7 0-2.2z"/>'
            '<path fill="#ea4335" d="M3.6 22.2 13.4 12l3.4 3.4L5 22.1c-.5.3-1 .3-1.4.1z"/>'
            '<path fill="#4285f4" d="M3.6 1.8c.4-.2.9-.2 1.4.1l11.8 6.7-3.4 3.4z"/></svg>')
-PHONE_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3" fill="none" '
-              'stroke="currentColor" stroke-width="2"/><circle cx="12" cy="18" r="1.3" fill="currentColor"/></svg>')
+APPLE_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.37 12.6c-.02-2.2 1.8-3.26 1.88-3.31'
+              '-1.02-1.5-2.62-1.7-3.19-1.72-1.36-.14-2.65.8-3.34.8-.69 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67'
+              '-.39 6.62 1.11 8.79.73 1.06 1.6 2.25 2.75 2.21 1.1-.04 1.52-.71 2.85-.71 1.33 0 1.71.71 2.88.69 1.19-.02 1.94-1.08'
+              ' 2.66-2.15.84-1.23 1.19-2.42 1.21-2.48-.03-.01-2.31-.89-2.32-3.55zM14.17 6.13c.6-.74 1.02-1.76.9-2.78-.88.04-1.94'
+              '.59-2.57 1.32-.56.65-1.06 1.69-.93 2.69.98.08 1.98-.5 2.6-1.23z"/></svg>')
 
 
 # ── helpers ────────────────────────────────────────────────────────────────
@@ -165,9 +169,22 @@ def verify_policy(src_html, out_html, app_name):
 
 
 # ── snippets ───────────────────────────────────────────────────────────────
+ANDROID_STATE = {"play": "live", "testing": "testing", "soon": "soon", "dev": "dev"}
+
+
+def plat_chip(platform, state):
+    return (f'<span class="status status-{state}"><b>{platform}</b>'
+            f'<span data-i18n="st.{state}">{{{{st.{state}}}}}</span></span>')
+
+
 def status_chip(a):
-    s = a["status"]
-    return f'<span class="status status-{s}" data-i18n="status.{s}">{{{{status.{s}}}}}</span>'
+    """Two chips — Android and iOS — each: live · testing · soon · dev."""
+    return ('<span class="plat-chips">' + plat_chip("Android", ANDROID_STATE.get(a["status"], a["status"]))
+            + plat_chip("iOS", a.get("ios_status", "soon")) + '</span>')
+
+
+def support_path(a):
+    return f"apps/{a['slug']}/support.html"
 
 
 def app_url(a, root):
@@ -225,12 +242,13 @@ def reel_chips(apps, chapters, root):
 
 def privacy_links_inline(a, root):
     pol = a["policy"]
+    support = f'<a href="{root}{support_path(a)}" data-i18n="apps.support">{{{{apps.support}}}}</a>'
     if not pol.get("android") and not pol.get("ios"):
         return (f'<div class="app-card-privacy"><span data-i18n="apps.privacy">{{{{apps.privacy}}}}</span>'
-                f'<span class="muted-pill" data-i18n="privacy.soon">{{{{privacy.soon}}}}</span></div>')
+                f'<span class="muted-pill" data-i18n="privacy.soon">{{{{privacy.soon}}}}</span>· {support}</div>')
     return (f'<div class="app-card-privacy"><span data-i18n="apps.privacy">{{{{apps.privacy}}}}</span>'
             f'<a href="{root}{policy_path(a, "android")}" data-i18n="apps.android">{{{{apps.android}}}}</a>'
-            f'<a href="{root}{policy_path(a, "ios")}" data-i18n="apps.ios">{{{{apps.ios}}}}</a></div>')
+            f'<a href="{root}{policy_path(a, "ios")}" data-i18n="apps.ios">{{{{apps.ios}}}}</a>· {support}</div>')
 
 
 def play_button(a, small=False):
@@ -239,6 +257,14 @@ def play_button(a, small=False):
                 f'<span><small>GET IT ON</small>Google Play</span></a>')
     return (f'<span class="store-btn off">{GP_ICON}<span><small>Google Play</small>'
             f'<span data-i18n="apps.play_soon">{{{{apps.play_soon}}}}</span></span></span>')
+
+
+def appstore_button(a):
+    if a.get("appstore_live") and a.get("appstore"):
+        return (f'<a class="store-btn" href="{esc(a["appstore"])}" target="_blank" rel="noopener">{APPLE_ICON}'
+                f'<span><small>Download on the</small>App Store</span></a>')
+    return (f'<span class="store-btn off">{APPLE_ICON}<span><small>iPhone · iPad</small>'
+            f'<span data-i18n="app.appstore_soon">{{{{app.appstore_soon}}}}</span></span></span>')
 
 
 def app_cards(apps, root):
@@ -296,7 +322,7 @@ def policy_table(apps, root):
     for a in apps:
         k = f"apps.{a['slug']}.name"
         rows.append(f'''          <tr>
-            <td data-th=""><a class="policy-app" href="{app_url(a, root)}" style="color:inherit;text-decoration:none"><img src="{root}apps/{a["slug"]}/media/icon.webp" alt="" width="40" height="40"><span data-i18n="{k}">{{{{{k}}}}}</span></a></td>
+            <td data-th=""><a class="policy-app" href="{app_url(a, root)}" style="color:inherit;text-decoration:none"><img src="{root}apps/{a["slug"]}/media/icon.webp" alt="" width="40" height="40"><span data-i18n="{k}">{{{{{k}}}}}</span></a><a class="policy-support" href="{root}{support_path(a)}" data-i18n="privacy.support">{{{{privacy.support}}}}</a></td>
             <td data-th="Android">{policy_cell(a, "android", root)}</td>
             <td data-th="iOS">{policy_cell(a, "ios", root)}</td>
           </tr>''')
@@ -305,12 +331,14 @@ def policy_table(apps, root):
             '          <tbody>\n' + "\n".join(rows) + '\n          </tbody>\n        </table>')
 
 
-def head(d, root, title_key, desc_key, canonical, og_image, theme="#a9d3e9", title_override=None, desc_override=None):
+def head(d, root, title_key, desc_key, canonical, og_image, theme="#a9d3e9", title_override=None, desc_override=None,
+         extra=""):
     tpl = read(TPL / "_head.html")
     return render(tpl, d, {
         "title_key": title_key, "desc_key": desc_key,
         "title": esc(title_override or d[title_key]), "desc": esc(desc_override or d[desc_key]),
         "canonical": canonical, "og_image": og_image, "theme_color": theme, "root": root, "ver": VER,
+        "extra_head": extra,
     })
 
 
@@ -346,7 +374,7 @@ def build_app(d, a, apps):
         stores.append(f'<a class="btn btn-ghost btn-sm" href="{esc(a["test_url"])}" target="_blank" rel="noopener" data-i18n="apps.test">{{{{apps.test}}}}</a>')
     if a.get("website"):
         stores.append(f'<a class="btn btn-ghost btn-sm" href="{esc(a["website"])}" target="_blank" rel="noopener" data-i18n="app.site">{{{{app.site}}}}</a>')
-    stores.append(f'<span class="store-btn off">{PHONE_ICON}<span><small>iPhone · iPad</small><span data-i18n="app.appstore_soon">{{{{app.appstore_soon}}}}</span></span></span>')
+    stores.insert(1, appstore_button(a))
 
     feats = []
     for i in range(1, FEATURES + 1):
@@ -389,6 +417,11 @@ def build_app(d, a, apps):
             cards.append(f'''          <div class="policy-card"><div class="pc-icon">{icon}</div><div>
             <h3 data-i18n="{label}">{{{{{label}}}}}</h3><p><span class="muted-pill" data-i18n="privacy.soon">{{{{privacy.soon}}}}</span></p>
             <div class="row"><a class="btn btn-ghost btn-sm" href="privacy-{kind}.html" data-i18n="app.open">{{{{app.open}}}}</a></div></div></div>''')
+    sfull = SITE_URL + support_path(a)
+    cards.append(f'''          <div class="policy-card"><div class="pc-icon">🛟</div><div>
+            <h3 data-i18n="app.support_t">{{{{app.support_t}}}}</h3><p class="pc-note" data-i18n="app.support_d">{{{{app.support_d}}}}</p><span class="policy-url">{sfull}</span>
+            <div class="row"><a class="btn btn-violet btn-sm" href="support.html" data-i18n="app.open">{{{{app.open}}}}</a>
+            <button class="copy-btn" type="button" data-copy="{sfull}" data-i18n="privacy.copy">{{{{privacy.copy}}}}</button></div></div></div>''')
 
     others = "\n".join(
         f'          <a class="mini-app" href="../{o["slug"]}/index.html"><img src="../{o["slug"]}/media/icon.webp" alt="" width="52" height="52">'
@@ -403,9 +436,11 @@ def build_app(d, a, apps):
     peek_file = next((p.name for p in (ROOT / "assets/mark").glob(peek + ".*")), "host_wave.svg")
     url = SITE_URL + f"apps/{slug}/"
     name, tagline = d[f"{k}.name"], d[f"{k}.tagline"]
+    # Smart App Banner у Safari на iPhone/iPad — з'явиться сам, щойно в JSON буде apple_id
+    smart = f'  <meta name="apple-itunes-app" content="app-id={esc(a["apple_id"])}">\n' if a.get("apple_id") else ""
     v = {
         "head": head(d, root, f"{k}.name", f"{k}.tagline", url, SITE_URL + f"apps/{slug}/media/icon-512.png",
-                     th["b"], title_override=f"{name} — {tagline} · OctoTechnology"),
+                     th["b"], title_override=f"{name} — {tagline} · OctoTechnology", extra=smart),
         "header": header, "footer": footer,
         "theme_style": f"--app-a:{th['a']};--app-b:{th['b']};--app-ink:{th['ink']}",
         "status_chip": status_chip(a), "age": esc(a["age"]), "store_buttons": "\n".join("            " + s for s in stores),
@@ -442,6 +477,26 @@ def build_app(d, a, apps):
             page = page.replace("%%POLICY%%", body)
         write(policy_path(a, kind), page)
 
+    # support page — its URL is the "Support URL" for App Store Connect (and fine for Google Play too)
+    subject = urllib.parse.quote(f"{a['text'][DEFAULT]['name']} — support")
+    links = []
+    for kind, label in (("android", "policy.android"), ("ios", "policy.ios")):
+        if a["policy"].get(kind):
+            links.append(f'          <li><a href="privacy-{kind}.html" data-i18n="{label}">{{{{{label}}}}}</a></li>')
+        else:
+            links.append(f'          <li><span data-i18n="{label}">{{{{{label}}}}}</span> — '
+                         f'<span class="muted-pill" data-i18n="privacy.soon">{{{{privacy.soon}}}}</span></li>')
+    sv = {
+        "head": head(d, root, "support.title", "support.lead", SITE_URL + support_path(a),
+                     SITE_URL + f"apps/{slug}/media/icon-512.png", th["b"],
+                     title_override=f"{name} — {d['support.title']}", desc_override=f"{name} — {d['support.lead']}"),
+        "header": header, "footer": footer,
+        "theme_style": f"--app-a:{th['a']};--app-b:{th['b']};--app-ink:{th['ink']}",
+        "status_chip": status_chip(a), "policy_links": "\n".join(links),
+        "mailto": f"mailto:octo.technology.dev@gmail.com?subject={subject}",
+    }
+    write(support_path(a), render(read(TPL / "support.html"), d, sv, slug=slug))
+
 
 def build_privacy_index(d, apps):
     root = "../"
@@ -463,6 +518,7 @@ def build_sitemap(apps):
     urls = [SITE_URL, SITE_URL + "privacy/"]
     for a in apps:
         urls.append(SITE_URL + f"apps/{a['slug']}/")
+        urls.append(SITE_URL + support_path(a))
         for kind in ("android", "ios"):
             if a["policy"].get(kind):
                 urls.append(SITE_URL + policy_path(a, kind))
