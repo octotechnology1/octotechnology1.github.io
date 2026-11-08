@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../../">
+<head>
+[[head]]
+</head>
+<body style="[[theme_style]]">
+[[header]]
+
+  <main>
+    <section class="policy-hero">
+      <div class="policy-hero-inner">
+        <p class="crumbs"><a href="index.html" data-i18n="policy.back">{{policy.back}}</a></p>
+        <img class="app-icon-xl" src="media/icon.webp" alt="" width="88" height="88">
+        <p class="app-name" data-i18n="@.name">{{@.name}}</p>
+        <h1 data-i18n="policy.title">{{policy.title}}</h1>
+        <nav class="platform-tabs" aria-label="Platform">
+          <a href="privacy-android.html"[[android_active]] data-i18n="policy.android">{{policy.android}}</a>
+          <a href="privacy-ios.html"[[ios_active]] data-i18n="policy.ios">{{policy.ios}}</a>
+        </nav>
+      </div>
+    </section>
+
+    <div class="policy-wrap">
+      <!-- Текст політики скопійовано без змін з оригінальної сторінки (джерело: content/policies/[[source]]) -->
+      <article class="policy">
+[[policy_html]]
+      </article>
+    </div>
+  </main>
+
+[[footer]]
+</body>
+</html>

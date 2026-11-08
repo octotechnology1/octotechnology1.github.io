@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Політика конфіденційності — TwoMeows</title>
+  <meta name="description" content="Політика конфіденційності застосунку TwoMeows — які дані ми збираємо, як зберігаємо і як з нами зв'язатися.">
+  <meta name="theme-color" content="#a9d3e9">
+  <link rel="canonical" href="https://twomeows.github.io/privacy.html">
+  <meta property="og:title" content="Політика конфіденційності — TwoMeows">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://twomeows.github.io/privacy.html">
+  <meta property="og:site_name" content="TwoMeows">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .legal { max-width: 760px; margin: 0 auto; padding: calc(var(--header-h) + 40px) 24px 80px; }
+    .legal h1 { font-size: 32px; margin-bottom: 4px; }
+    .legal h2 { font-size: 22px; text-align: left; margin: 34px 0 10px; }
+    .legal h3 { font-size: 17px; text-align: left; margin: 22px 0 6px; }
+    .legal p, .legal li { color: var(--ink-soft); font-weight: 600; }
+    .legal ul { padding-left: 22px; }
+    .legal li { margin-bottom: 6px; }
+    .legal .updated { color: var(--ink-soft); font-weight: 700; opacity: .75; margin-bottom: 8px; }
+    .legal table { width: 100%; border-collapse: collapse; margin: 10px 0 18px; font-size: 15px; }
+    .legal th, .legal td { text-align: left; padding: 9px 12px; border-bottom: 1px solid rgba(0,0,0,.1); vertical-align: top; color: var(--ink-soft); font-weight: 600; }
+    .legal th { font-weight: 800; }
+    .legal .tablewrap { overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="index.html">
+      <img src="assets/cats/meows_logo.svg" alt="" class="logo-icon">
+      <span class="logo-text">Two<em>Meows</em></span>
+    </a>
+  </header>
+
+  <main class="legal">
+    <h1>Політика конфіденційності 🔒</h1>
+    <p class="updated">Чинна з 14 серпня 2026 року</p>
+    <p>Ця політика стосується Android-версії застосунку. Для iPhone та iPad діє
+    <a href="privacy-ios.html">окрема політика конфіденційності</a>.</p>
+
+    <p>TwoMeows — застосунок з двомовними аудіоказками для дітей віком від 2 до 7 років.
+    Ним користуються діти, тому ми свідомо збираємо якнайменше даних. Нижче описано
+    рівно те, що застосунок робить насправді.</p>
+
+    <h2>Коротко про головне</h2>
+    <ul>
+      <li>Реклами немає. Ми не показуємо рекламу і не передаємо дані рекламним мережам.</li>
+      <li>Ми не продаємо і не передаємо персональні дані третім сторонам.</li>
+      <li>Рекламний ідентифікатор пристрою (Advertising ID) застосунок <strong>не збирає</strong>:
+      відповідний дозвіл прибрано зі збірки, а сигнали персоналізації реклами вимкнено.</li>
+      <li>Профіль дитини (ім'я, аватар, вік) зберігається <strong>на самому пристрої</strong>.</li>
+      <li>Батьки можуть будь-коли видалити профіль дитини та всі пов'язані дані.</li>
+    </ul>
+
+    <h2>Які дані ми обробляємо</h2>
+
+    <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>Дані</th><th>Навіщо</th><th>Де зберігаються</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Ім'я, аватар і вік дитини</td>
+          <td>Персоналізація інтерфейсу та добір казок за віком</td>
+          <td>Лише на пристрої, у локальному сховищі застосунку</td>
+        </tr>
+        <tr>
+          <td>Адреса електронної пошти дорослого</td>
+          <td>Необов'язковий обліковий запис, щоб прогрес не загубився при зміні пристрою</td>
+          <td>Firebase Authentication (Google)</td>
+        </tr>
+        <tr>
+          <td>Прогрес читання і вивчені слова</td>
+          <td>Продовжити казку з того самого місця, показати вивчені слова</td>
+          <td>Firebase Firestore (Google), прив'язано до облікового запису</td>
+        </tr>
+        <tr>
+          <td>Знеособлена статистика використання</td>
+          <td>Зрозуміти, які казки читають і де застосунок незручний</td>
+          <td>Firebase Analytics (Google)</td>
+        </tr>
+        <tr>
+          <td>Звіти про збої</td>
+          <td>Виправляти помилки, через які застосунок закривається</td>
+          <td>Firebase Crashlytics (Google)</td>
+        </tr>
+        <tr>
+          <td>Стан підписки</td>
+          <td>Відкрити доступ до повної бібліотеки</td>
+          <td>Google Play Billing; платіжні дані обробляє Google, ми їх не бачимо</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3>Чого ми не робимо</h3>
+    <ul>
+      <li>Не збираємо точне місцезнаходження, контакти, фотографії, мікрофон і камеру.</li>
+      <li>Не показуємо рекламу і не використовуємо рекламні SDK.</li>
+      <li>Не створюємо рекламних профілів дітей і не застосовуємо персоналізовану рекламу.</li>
+      <li>Не публікуємо і не передаємо ім'я чи вік дитини за межі пристрою.</li>
+    </ul>
+
+    <h2>Діти</h2>
+    <p>Застосунок призначений для дітей, тому ми дотримуємось вимог програми Google Play
+    «Для сім'ї», Закону США про захист приватності дітей в інтернеті (COPPA) та
+    Загального регламенту ЄС про захист даних (GDPR), зокрема його положень щодо
+    неповнолітніх.</p>
+    <p>Обліковий запис створює дорослий і лише за власним бажанням — без нього
+    застосунок працює повністю. Ім'я, яке батьки вводять для профілю дитини, ніколи
+    не залишає пристрій: воно потрібне тільки для звертання на екрані. Радимо не
+    вказувати повне справжнє ім'я — достатньо імені або прізвиська.</p>
+
+    <h2>Сторонні сервіси</h2>
+    <p>Застосунок використовує сервіси Google: Firebase Authentication, Firestore,
+    Storage, Analytics, Crashlytics і Google Play Billing. Дані обробляються на
+    серверах Google відповідно до
+    <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">політики Firebase</a>
+    та <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">політики конфіденційності Google</a>.
+    Інших сторонніх сервісів у застосунку немає.</p>
+
+    <h2>Скільки зберігаються дані</h2>
+    <p>Прогрес і обліковий запис зберігаються, поки ви користуєтесь застосунком.
+    Після видалення облікового запису пов'язані з ним дані видаляються протягом
+    30 днів. Знеособлена статистика зберігається в агрегованому вигляді й не дозволяє
+    ідентифікувати конкретну дитину.</p>
+
+    <h2>Ваші права</h2>
+    <ul>
+      <li><strong>Видалити профіль дитини</strong> — у самому застосунку, в налаштуваннях профілю.</li>
+      <li><strong>Видалити обліковий запис і всі дані</strong> — у застосунку або на запит, див. <a href="#delete">розділ нижче</a>.</li>
+      <li><strong>Отримати копію даних</strong> або <strong>виправити їх</strong> — за запитом на пошту нижче.</li>
+      <li><strong>Відкликати згоду</strong> — видаліть обліковий запис або застосунок.</li>
+    </ul>
+
+    <h2 id="delete">Видалення акаунта і даних</h2>
+    <p>Видалити акаунт можна двома способами, обидва доступні будь-коли.</p>
+    <ul>
+      <li><strong>У застосунку.</strong> Профіль → Налаштування → Налаштування акаунту →
+        «Видалити акаунт». Дія незворотна і виконується одразу.</li>
+      <li><strong>На запит.</strong> Напишіть на
+        <a href="mailto:twomeoows@gmail.com">twomeoows@gmail.com</a> з адреси, на яку
+        зареєстровано акаунт. Ми виконаємо запит протягом 30 днів.</li>
+    </ul>
+    <p><strong>Що видаляється:</strong> обліковий запис, адреса електронної пошти,
+    профілі дітей (ім'я, аватар, вік), прогрес читання, вивчені слова, накопичені
+    наліпки і стан підписки на пристрої.</p>
+    <p><strong>Що залишається:</strong> знеособлені записи про використання застосунку —
+    без імені, пошти та будь-якого ідентифікатора, за яким можна впізнати людину. Вони
+    зберігаються в агрегованому вигляді й потрібні лише для загальної статистики.
+    Історія платежів залишається в Google Play згідно з правилами Google.</p>
+    <p>Видалення акаунта не скасовує підписку автоматично: керувати нею і скасувати її
+    можна в Google Play, у розділі «Підписки».</p>
+
+    <h2>Зміни</h2>
+    <p>Якщо ми змінимо цю політику, оновлена версія з'явиться на цій сторінці, а дата
+    вгорі зміниться. Про суттєві зміни ми повідомимо в застосунку.</p>
+
+    <h2>Контакти</h2>
+    <p>З питань конфіденційності та для запитів на видалення даних:
+    <a href="mailto:twomeoows@gmail.com">twomeoows@gmail.com</a></p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">© 2026 TwoMeows</p>
+    </div>
+  </footer>
+</body>
+</html>

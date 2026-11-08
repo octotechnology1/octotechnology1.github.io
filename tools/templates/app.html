@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../../">
+<head>
+[[head]]
+</head>
+<body style="[[theme_style]]">
+[[header]]
+
+  <div class="cats-layer" aria-hidden="true">
+    <img class="cat cat-left cat-m[[peek_flip]]" data-cat="features" src="../../assets/mark/[[peek_file]]" alt="">
+    <img class="cat cat-right cat-m" data-cat="privacy" src="../../assets/mark/host_thumb.svg" alt="">
+  </div>
+
+  <main>
+    <!-- ═══ Hero гри ═══ -->
+    <section class="app-hero">
+      <div class="app-hero-inner">
+        <div class="app-hero-text reveal">
+          <p class="crumbs"><a href="../../index.html#apps" data-i18n="app.back">{{app.back}}</a></p>
+          <div class="app-title">
+            <img class="app-icon-xl" src="media/icon.webp" alt="" width="104" height="104">
+            <div>
+              <h1 data-i18n="@.name">{{@.name}}</h1>
+              [[status_chip]]
+            </div>
+          </div>
+          <p class="app-tagline" data-i18n="@.tagline">{{@.tagline}}</p>
+          <div class="chips">
+            <span class="chip">👶 [[age]] <span data-i18n="app.years">{{app.years}}</span></span>
+            <span class="chip">🗣️ <span data-i18n="@.langs">{{@.langs}}</span></span>
+            <span class="chip" data-i18n="hero.p1">{{hero.p1}}</span>
+          </div>
+          <div class="store-row">
+[[store_buttons]]
+          </div>
+        </div>
+        <div class="app-hero-art reveal">
+          <div class="frame"><img src="media/feature.webp" alt="" width="1024" height="500"></div>
+          <img class="app-hero-mark" src="media/[[mark_file]]" alt="">
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Про застосунок ═══ -->
+    <section class="section" id="about">
+      <div class="section-inner reveal">
+        <h2 data-i18n="app.about">{{app.about}}</h2>
+        <div class="about-text">
+          <p data-i18n="@.about1">{{@.about1}}</p>
+          <p data-i18n="@.about2">{{@.about2}}</p>
+        </div>
+[[dev_note]]
+      </div>
+    </section>
+
+    <!-- ═══ Що всередині ═══ -->
+    <section class="section" id="features" data-cat-section="features">
+      <div class="section-inner reveal">
+        <h2 data-i18n="app.features">{{app.features}}</h2>
+        <div class="cards-3">
+[[features]]
+        </div>
+      </div>
+    </section>
+
+[[shots_section]]
+
+[[video_section]]
+
+    <!-- ═══ Коротко ═══ -->
+    <section class="section" id="facts">
+      <div class="section-inner reveal">
+        <h2 data-i18n="app.facts">{{app.facts}}</h2>
+        <dl class="facts">
+          <div class="fact"><dt data-i18n="app.f_age">{{app.f_age}}</dt><dd>[[age]] <span data-i18n="app.years">{{app.years}}</span></dd></div>
+          <div class="fact"><dt data-i18n="app.f_langs">{{app.f_langs}}</dt><dd data-i18n="@.langs">{{@.langs}}</dd></div>
+          <div class="fact"><dt data-i18n="app.f_price">{{app.f_price}}</dt><dd data-i18n="@.price">{{@.price}}</dd></div>
+          <div class="fact"><dt data-i18n="app.f_ads">{{app.f_ads}}</dt><dd data-i18n="app.f_ads_v">{{app.f_ads_v}}</dd></div>
+          <div class="fact"><dt data-i18n="app.f_platforms">{{app.f_platforms}}</dt><dd data-i18n="app.f_platforms_v">{{app.f_platforms_v}}</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ═══ Політика конфіденційності ═══ -->
+    <section class="section" id="privacy" data-cat-section="privacy">
+      <div class="section-inner reveal">
+        <h2 data-i18n="app.privacy_title">{{app.privacy_title}}</h2>
+        <p class="section-lead" data-i18n="app.privacy_lead">{{app.privacy_lead}}</p>
+        <div class="policy-cards">
+[[policy_cards]]
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Інші застосунки ═══ -->
+    <section class="section" id="others">
+      <div class="section-inner reveal">
+        <h2 data-i18n="app.others">{{app.others}}</h2>
+        <div class="mini-apps">
+[[others]]
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot">
+    <button class="lb-close" type="button" aria-label="Close">×</button>
+    <button class="lb-prev" type="button" aria-label="Previous">‹</button>
+    <img src="" alt="">
+    <button class="lb-next" type="button" aria-label="Next">›</button>
+  </div>
+
+[[footer]]
+</body>
+</html>

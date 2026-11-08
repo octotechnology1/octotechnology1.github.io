@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-root="">
+<head>
+[[head]]
+</head>
+<body>
+[[header]]
+
+  <!-- Марк визирає з боків, коли його секція в центрі екрана -->
+  <div class="cats-layer" aria-hidden="true">
+    <img class="cat cat-left cat-m"  data-cat="hero"     src="assets/mark/teacher.svg" alt="">
+    <img class="cat cat-right cat-l flip" data-cat="apps" src="assets/mark/mechanic.webp" alt="">
+    <img class="cat cat-left cat-m"  data-cat="videos"   src="assets/mark/host_point.svg" alt="">
+    <img class="cat cat-right cat-m flip" data-cat="explore" src="assets/mark/artist_show.svg" alt="">
+    <img class="cat cat-left cat-m"  data-cat="parents"  src="assets/mark/host_thumb.svg" alt="">
+    <img class="cat cat-right cat-m" data-cat="kids"     src="assets/mark/host_cheer.svg" alt="">
+    <img class="cat cat-left cat-m"  data-cat="studio"   src="assets/mark/builder.webp" alt="">
+    <img class="cat cat-right cat-m" data-cat="privacy"  src="assets/mark/home_wave.webp" alt="">
+  </div>
+
+  <main>
+    <!-- ═══ 1. Hero ═══ -->
+    <section class="hero" id="hero" data-cat-section="hero">
+      <div class="hero-text reveal">
+        <span class="hero-badge" data-i18n="hero.badge">{{hero.badge}}</span>
+        <h1 data-i18n-html="hero.title">{{{hero.title}}}</h1>
+        <p class="hero-sub" data-i18n="hero.sub">{{hero.sub}}</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#apps" data-i18n="hero.cta1">{{hero.cta1}}</a>
+          <a class="btn btn-ghost" href="#videos" data-i18n="hero.cta2">{{hero.cta2}}</a>
+        </div>
+        <ul class="hero-points">
+          <li data-i18n="hero.p1">{{hero.p1}}</li>
+          <li data-i18n="hero.p2">{{hero.p2}}</li>
+          <li data-i18n="hero.p3">{{hero.p3}}</li>
+        </ul>
+      </div>
+
+      <!-- 3D-орбіта: восьминіг-логотип і застосунки студії -->
+      <div class="orbit-stage reveal" aria-label="OctoTechnology apps">
+        <div class="orbit-tilt">
+          <div class="orbit-glow"></div>
+          <div class="orbit-island"></div>
+          <span class="bubble b1"></span><span class="bubble b2"></span><span class="bubble b3"></span><span class="bubble b4"></span>
+          <img class="octo-hero" src="assets/brand/octo.svg" alt="OctoTechnology" width="230" height="230">
+          <div class="orbit"><div class="orbit-ring">
+[[orbit_items]]
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 2. Полиця застосунків (книжечки) ═══ -->
+    <section class="section" id="apps" data-cat-section="apps">
+      <div class="section-inner reveal">
+        <h2 data-i18n="shelf.title">{{shelf.title}}</h2>
+        <p class="section-lead" data-i18n="shelf.lead">{{shelf.lead}}</p>
+        <div class="shelf">
+          <div class="shelf-track">
+[[shelf]]
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 3. Відео ═══ -->
+    <section class="section" id="videos" data-cat-section="videos">
+      <div class="section-inner reveal">
+        <h2 data-i18n="video.title">{{video.title}}</h2>
+        <p class="section-lead" data-i18n="video.lead">{{video.lead}}</p>
+        <div class="reel" data-chapters='[[chapters_json]]'>
+          <video id="reel-video" muted loop playsinline preload="metadata" poster="assets/video/showreel.jpg">
+            <source src="assets/video/showreel.mp4" type="video/mp4">
+          </video>
+          <div class="reel-label" aria-live="polite"><img src="" alt=""><span></span></div>
+          <button class="reel-play" type="button" aria-label="Play / pause">❚❚</button>
+        </div>
+        <div class="reel-chips">
+[[reel_chips]]
+        </div>
+        <p class="reel-note" data-i18n="video.full">{{video.full}}</p>
+      </div>
+    </section>
+
+    <!-- ═══ 4. Картки застосунків ═══ -->
+    <section class="section" id="explore" data-cat-section="explore">
+      <div class="section-inner reveal">
+        <h2 data-i18n="apps.title">{{apps.title}}</h2>
+        <p class="section-lead" data-i18n="apps.lead">{{apps.lead}}</p>
+        <div class="apps-grid">
+[[app_cards]]
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 5. Кіт Марк ═══ -->
+    <section class="section" id="mark">
+      <div class="section-inner reveal">
+        <h2 data-i18n="mark.title">{{mark.title}}</h2>
+        <p class="section-lead" data-i18n="mark.lead">{{mark.lead}}</p>
+        <div class="mark-grid">
+[[mark_tiles]]
+        </div>
+        <p class="motto" data-i18n="mark.motto">{{mark.motto}}</p>
+      </div>
+    </section>
+
+    <!-- ═══ 6. Батькам ═══ -->
+    <section class="section" id="parents" data-cat-section="parents">
+      <div class="section-inner reveal">
+        <h2 data-i18n="parents.title">{{parents.title}}</h2>
+        <p class="section-lead" data-i18n="parents.lead">{{parents.lead}}</p>
+        <div class="cards-3">
+          <div class="card"><div class="card-emoji">🌈</div><h3 data-i18n="parents.c1t">{{parents.c1t}}</h3><p data-i18n="parents.c1d">{{parents.c1d}}</p></div>
+          <div class="card"><div class="card-emoji">🚫</div><h3 data-i18n="parents.c2t">{{parents.c2t}}</h3><p data-i18n="parents.c2d">{{parents.c2d}}</p></div>
+          <div class="card"><div class="card-emoji">🔒</div><h3 data-i18n="parents.c3t">{{parents.c3t}}</h3><p data-i18n="parents.c3d">{{parents.c3d}}</p></div>
+          <div class="card"><div class="card-emoji">👨‍👩‍👧</div><h3 data-i18n="parents.c4t">{{parents.c4t}}</h3><p data-i18n="parents.c4d">{{parents.c4d}}</p></div>
+          <div class="card"><div class="card-emoji">✈️</div><h3 data-i18n="parents.c5t">{{parents.c5t}}</h3><p data-i18n="parents.c5d">{{parents.c5d}}</p></div>
+          <div class="card"><div class="card-emoji">🗣️</div><h3 data-i18n="parents.c6t">{{parents.c6t}}</h3><p data-i18n="parents.c6d">{{parents.c6d}}</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 7. Дітям ═══ -->
+    <section class="section" id="kids" data-cat-section="kids">
+      <div class="section-inner reveal">
+        <h2 data-i18n="kids.title">{{kids.title}}</h2>
+        <p class="section-lead" data-i18n="kids.lead">{{kids.lead}}</p>
+        <div class="kids-features">
+          <div class="kids-item" data-i18n="kids.f1">{{kids.f1}}</div>
+          <div class="kids-item" data-i18n="kids.f2">{{kids.f2}}</div>
+          <div class="kids-item" data-i18n="kids.f3">{{kids.f3}}</div>
+          <div class="kids-item" data-i18n="kids.f4">{{kids.f4}}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 8. Про студію ═══ -->
+    <section class="section" id="studio" data-cat-section="studio">
+      <div class="section-inner reveal studio-box">
+        <div>
+          <h2 data-i18n="studio.title">{{studio.title}}</h2>
+          <p class="section-lead" data-i18n="studio.lead">{{studio.lead}}</p>
+          <p class="studio-text" data-i18n="studio.p1">{{studio.p1}}</p>
+        </div>
+        <div class="stats">
+          <div class="stat"><b data-count="[[app_count]]">[[app_count]]</b><span data-i18n="studio.s1">{{studio.s1}}</span></div>
+          <div class="stat"><b data-count="17">17</b><span data-i18n="studio.s2">{{studio.s2}}</span></div>
+          <div class="stat"><b data-count="30">30</b><span data-i18n="studio.s3">{{studio.s3}}</span></div>
+          <div class="stat"><b data-count="64">64</b><span data-i18n="studio.s4">{{studio.s4}}</span></div>
+          <div class="stat"><b>0</b><span data-i18n="studio.s5">{{studio.s5}}</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 9. Політики конфіденційності ═══ -->
+    <section class="section" id="privacy" data-cat-section="privacy">
+      <div class="section-inner reveal">
+        <h2 data-i18n="privacy.title">{{privacy.title}}</h2>
+        <p class="section-lead" data-i18n="privacy.lead">{{privacy.lead}}</p>
+[[policy_table]]
+      </div>
+    </section>
+
+    <!-- ═══ 10. Контакти ═══ -->
+    <section class="section" id="contact">
+      <div class="section-inner section-narrow reveal">
+        <div class="cta-box">
+          <img class="cta-mark" src="assets/mark/artist_wow.svg" alt="">
+          <h2 data-i18n="contact.title">{{contact.title}}</h2>
+          <p data-i18n="contact.lead">{{contact.lead}}</p>
+          <a class="btn btn-primary btn-lg" href="mailto:octo.technology.dev@gmail.com" data-i18n="contact.cta">{{contact.cta}}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+[[footer]]
+</body>
+</html>
