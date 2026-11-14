@@ -27,6 +27,9 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 SITE_URL = "https://octotechnology1.github.io/"   # change here if the site moves (e.g. own domain)
+OG_DIMS = ('  <meta property="og:image:width" content="1200">\n'
+           '  <meta property="og:image:height" content="630">\n'
+           '  <meta property="og:image:alt" content="OctoTechnology: the cyan octopus on the letter O">\n')   # только для обложки студии
 LANGS = ["en", "uk", "ru", "sk"]
 DEFAULT = "en"
 FEATURES = 6
@@ -114,6 +117,15 @@ def build_langs(site, apps):
             txt.update(a["text"].get(l, {}))
             for k, v in txt.items():
                 d[f"apps.{a['slug']}.{k}"] = v
+            # <title> и description страниц приложения переводятся целиком: «Имя — слоган · OctoTechnology»,
+            # иначе после смены языка во вкладке и в поиске оставалось только имя приложения
+            k, name = f"apps.{a['slug']}", txt["name"]
+            d[f"{k}.page_title"] = f"{name} — {txt['tagline']} · OctoTechnology"
+            d[f"{k}.policy_title_android"] = f"{name} — {d['policy.title']} (Android) · OctoTechnology"
+            d[f"{k}.policy_title_ios"] = f"{name} — {d['policy.title']} (iOS) · OctoTechnology"
+            d[f"{k}.policy_desc"] = f"{name} — {d['policy.title']}"
+            d[f"{k}.support_title"] = f"{name} — {d['support.title']} · OctoTechnology"
+            d[f"{k}.support_desc"] = f"{name} — {d['support.lead']}"
         dicts[l] = d
         write(f"lang/{l}.json", json.dumps(d, ensure_ascii=False, indent=0))
     return dicts
@@ -281,6 +293,7 @@ def app_cards(apps, root):
               <div class="app-card-head"><img class="app-card-icon" src="{root}apps/{a["slug"]}/media/icon.webp" alt="" width="76" height="76">
                 <div><h3><a class="link-cover" href="{app_url(a, root)}" style="color:inherit;text-decoration:none" data-i18n="{k}.name">{{{{{k}.name}}}}</a></h3><span class="meta" data-i18n="{k}.meta">{{{{{k}.meta}}}}</span></div></div>
               <p class="app-card-tagline" data-i18n="{k}.tagline">{{{{{k}.tagline}}}}</p>
+              <p class="app-card-price"><span aria-hidden="true">💳 </span><span data-i18n="{k}.price">{{{{{k}.price}}}}</span></p>
               <div class="app-card-actions"><a class="btn btn-violet btn-sm" href="{app_url(a, root)}" data-i18n="apps.more">{{{{apps.more}}}}</a>{extra}</div>
               {privacy_links_inline(a, root)}
             </div>
@@ -289,10 +302,10 @@ def app_cards(apps, root):
 
 
 MARK_ROLES = [  # (image, text key prefix, app slug)
-    ("apps/twomeows/media/mark.webp", "mark.r1", "twomeows"),
+    ("assets/mark/teacher_heart.webp", "mark.r1", "twomeows"),
     ("assets/mark/mechanic.webp", "mark.r2", "marks-garage"),
-    ("assets/mark/host_fly.svg", "mark.r3", "mark-the-cat"),
-    ("assets/mark/artist_hello.svg", "mark.r4", "marks-art"),
+    ("assets/mark/host_fly.webp", "mark.r3", "mark-the-cat"),
+    ("assets/mark/artist_hello.webp", "mark.r4", "marks-art"),
     ("assets/mark/home_cheer.webp", "mark.r5", "marks-home"),
 ]
 
@@ -338,6 +351,7 @@ def head(d, root, title_key, desc_key, canonical, og_image, theme="#a9d3e9", tit
         "title_key": title_key, "desc_key": desc_key,
         "title": esc(title_override or d[title_key]), "desc": esc(desc_override or d[desc_key]),
         "canonical": canonical, "og_image": og_image, "theme_color": theme, "root": root, "ver": VER,
+        "og_dims": OG_DIMS if og_image.endswith("assets/brand/og-cover.jpg") else "",
         "extra_head": extra,
     })
 
@@ -347,13 +361,28 @@ def chrome(d, root, home):
     return render(read(TPL / "_header.html"), d, v), render(read(TPL / "_footer.html"), d, v)
 
 
+def brand_dims():
+    """Размеры полотен логотипа и героя (их пишет tools/brand.py), чтобы страница не прыгала при загрузке картинок."""
+    f = ROOT / "content" / "brand.json"
+    d = json.loads(read(f)) if f.exists() else {}
+    return {"logo_w": str(d.get("logo_w", 800)), "logo_h": str(d.get("logo_h", 464)),
+            "octo_w": str(d.get("octo_w", 440)), "octo_h": str(d.get("octo_h", 458))}
+
+
+def org_jsonld():
+    """Студия для поисковиков: название, сайт, логотип, почта (schema.org Organization)."""
+    org = {"@context": "https://schema.org", "@type": "Organization", "name": "OctoTechnology", "url": SITE_URL,
+           "logo": SITE_URL + "assets/brand/android-chrome-512.png", "email": "octo.technology.dev@gmail.com"}
+    return '  <script type="application/ld+json">' + json.dumps(org, ensure_ascii=False) + '</script>\n'
+
+
 # ── pages ──────────────────────────────────────────────────────────────────
 def build_home(d, apps, chapters):
     root = ""
     header, footer = chrome(d, root, "")
     v = {
-        "head": head(d, root, "meta.title", "meta.desc", SITE_URL, SITE_URL + "assets/brand/og-cover.jpg"),
-        "header": header, "footer": footer,
+        "head": head(d, root, "meta.title", "meta.desc", SITE_URL, SITE_URL + "assets/brand/og-cover.jpg", extra=org_jsonld()),
+        "header": header, "footer": footer, "ver": VER, **brand_dims(),
         "orbit_items": orbit_items(apps, root), "shelf": shelf(apps, root),
         "chapters_json": esc(json.dumps(chapters)), "reel_chips": reel_chips(apps, chapters, root),
         "app_cards": app_cards(apps, root), "mark_tiles": mark_tiles(root),
@@ -432,21 +461,28 @@ def build_app(d, a, apps):
     if a["status"] == "dev" or not m["shots"]:
         dev_note = '        <p class="dev-note" data-i18n="app.dev_note">{{app.dev_note}}</p>'
 
-    peek = a.get("peek", "host_wave")
-    peek_file = next((p.name for p in (ROOT / "assets/mark").glob(peek + ".*")), "host_wave.svg")
+    cats_layer, series = "", ""
+    if a.get("line") == "mark":   # серия «Приключения кота Марка»; у приложений студии без кота — ни кота, ни подписи серии
+        peek = a.get("peek", "host_wave")
+        peek_file = next((p.name for p in (ROOT / "assets/mark").glob(peek + ".*")), "host_wave.webp")
+        flip = " flip" if a.get("peek_flip") else ""
+        cats_layer = (f'  <div class="cats-layer" aria-hidden="true">\n'
+                      f'    <img class="cat cat-left cat-m{flip}" data-cat="features" src="../../assets/mark/{peek_file}" alt="">\n'
+                      f'    <img class="cat cat-right cat-m" data-cat="privacy" src="../../assets/mark/host_thumb.webp" alt="">\n'
+                      f'  </div>')
+        series = ('<p class="app-series"><a href="../../index.html#mark" data-i18n="series.mark">{{series.mark}}</a></p>')
     url = SITE_URL + f"apps/{slug}/"
-    name, tagline = d[f"{k}.name"], d[f"{k}.tagline"]
     # Smart App Banner у Safari на iPhone/iPad — з'явиться сам, щойно в JSON буде apple_id
     smart = f'  <meta name="apple-itunes-app" content="app-id={esc(a["apple_id"])}">\n' if a.get("apple_id") else ""
     v = {
-        "head": head(d, root, f"{k}.name", f"{k}.tagline", url, SITE_URL + f"apps/{slug}/media/icon-512.png",
-                     th["b"], title_override=f"{name} — {tagline} · OctoTechnology", extra=smart),
+        "head": head(d, root, f"{k}.page_title", f"{k}.tagline", url, SITE_URL + f"apps/{slug}/media/icon-512.png",
+                     th["b"], extra=smart),
         "header": header, "footer": footer,
         "theme_style": f"--app-a:{th['a']};--app-b:{th['b']};--app-ink:{th['ink']}",
         "status_chip": status_chip(a), "age": esc(a["age"]), "store_buttons": "\n".join("            " + s for s in stores),
         "mark_file": m.get("mark") or "mark.webp", "features": "\n".join(feats),
         "shots_section": shots, "video_section": video, "policy_cards": "\n".join(cards), "others": others,
-        "dev_note": dev_note, "peek_file": peek_file, "peek_flip": " flip" if a.get("peek_flip") else "",
+        "dev_note": dev_note, "cats_layer": cats_layer, "series": series,
     }
     write(f"apps/{slug}/index.html", render(read(TPL / "app.html"), d, v, slug=slug))
 
@@ -463,9 +499,8 @@ def build_app(d, a, apps):
                     '<h2 data-i18n="policy.soon_t">{{policy.soon_t}}</h2><p data-i18n="policy.soon_d">{{policy.soon_d}}</p></div>')
         purl = SITE_URL + policy_path(a, kind)
         pv = {
-            "head": head(d, root, "policy.title", f"{k}.name", purl, SITE_URL + f"apps/{slug}/media/icon-512.png", th["b"],
-                         title_override=f"{name} — {d['policy.title']} ({'Android' if kind == 'android' else 'iOS'})",
-                         desc_override=f"{name} — {d['policy.title']}"),
+            "head": head(d, root, f"{k}.policy_title_{kind}", f"{k}.policy_desc", purl,
+                         SITE_URL + f"apps/{slug}/media/icon-512.png", th["b"]),
             "header": header, "footer": footer,
             "theme_style": f"--app-a:{th['a']};--app-b:{th['b']};--app-ink:{th['ink']}",
             "android_active": ' class="active" aria-current="page"' if kind == "android" else "",
@@ -487,9 +522,8 @@ def build_app(d, a, apps):
             links.append(f'          <li><span data-i18n="{label}">{{{{{label}}}}}</span> — '
                          f'<span class="muted-pill" data-i18n="privacy.soon">{{{{privacy.soon}}}}</span></li>')
     sv = {
-        "head": head(d, root, "support.title", "support.lead", SITE_URL + support_path(a),
-                     SITE_URL + f"apps/{slug}/media/icon-512.png", th["b"],
-                     title_override=f"{name} — {d['support.title']}", desc_override=f"{name} — {d['support.lead']}"),
+        "head": head(d, root, f"{k}.support_title", f"{k}.support_desc", SITE_URL + support_path(a),
+                     SITE_URL + f"apps/{slug}/media/icon-512.png", th["b"]),
         "header": header, "footer": footer,
         "theme_style": f"--app-a:{th['a']};--app-b:{th['b']};--app-ink:{th['ink']}",
         "status_chip": status_chip(a), "policy_links": "\n".join(links),

@@ -6,16 +6,12 @@
 <body>
 [[header]]
 
-  <!-- Марк визирає з боків, коли його секція в центрі екрана -->
+  <!-- Марк (герой серії застосунків) визирає з боків лише в секціях про його застосунки.
+       Студія — восьминіг: у hero, «Про студію», «Батькам», політиках і контактах кота немає. -->
   <div class="cats-layer" aria-hidden="true">
-    <img class="cat cat-left cat-m"  data-cat="hero"     src="assets/mark/teacher.svg" alt="">
     <img class="cat cat-right cat-l flip" data-cat="apps" src="assets/mark/mechanic.webp" alt="">
-    <img class="cat cat-left cat-m"  data-cat="videos"   src="assets/mark/host_point.svg" alt="">
-    <img class="cat cat-right cat-m flip" data-cat="explore" src="assets/mark/artist_show.svg" alt="">
-    <img class="cat cat-left cat-m"  data-cat="parents"  src="assets/mark/host_thumb.svg" alt="">
-    <img class="cat cat-right cat-m" data-cat="kids"     src="assets/mark/host_cheer.svg" alt="">
-    <img class="cat cat-left cat-m"  data-cat="studio"   src="assets/mark/builder.webp" alt="">
-    <img class="cat cat-right cat-m" data-cat="privacy"  src="assets/mark/home_wave.webp" alt="">
+    <img class="cat cat-left cat-m"  data-cat="videos"   src="assets/mark/host_point.webp" alt="">
+    <img class="cat cat-right cat-m flip" data-cat="explore" src="assets/mark/artist_show.webp" alt="">
   </div>
 
   <main>
@@ -43,7 +39,7 @@
           <div class="orbit-glow"></div>
           <div class="orbit-island"></div>
           <span class="bubble b1"></span><span class="bubble b2"></span><span class="bubble b3"></span><span class="bubble b4"></span>
-          <img class="octo-hero" src="assets/brand/octo-anim.webp" alt="OctoTechnology" width="360" height="360">
+          <img class="octo-hero" id="octo-hero" src="assets/brand/octo-hero.webp" alt="OctoTechnology" width="[[octo_w]]" height="[[octo_h]]">
           <div class="orbit"><div class="orbit-ring">
 [[orbit_items]]
           </div></div>
@@ -64,14 +60,50 @@
       </div>
     </section>
 
-    <!-- ═══ 3. Відео ═══ -->
+    <!-- ═══ 3. Про студію (одразу після полиці: студія головна) ═══ -->
+    <section class="section" id="studio" data-cat-section="studio">
+      <div class="section-inner reveal studio-box">
+        <div class="studio-head">
+          <!-- логотип: анімація грає один раз, коли секція з'являється на екрані, і зупиняється на фінальному кадрі -->
+          <img class="studio-logo" id="studio-logo" src="assets/brand/logo.webp" data-anim="assets/brand/logo-intro.webp"
+               alt="OctoTechnology" width="[[logo_w]]" height="[[logo_h]]">
+          <div>
+            <h2 data-i18n="studio.title">{{studio.title}}</h2>
+            <p class="section-lead" data-i18n="studio.lead">{{studio.lead}}</p>
+            <p class="studio-text" data-i18n="studio.p1">{{studio.p1}}</p>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><b data-count="[[app_count]]">[[app_count]]</b><span data-i18n="studio.s1">{{studio.s1}}</span></div>
+          <div class="stat"><b data-count="17">17</b><span data-i18n="studio.s2">{{studio.s2}}</span></div>
+          <div class="stat"><b data-count="2">2</b><span data-i18n="studio.s3">{{studio.s3}}</span></div>
+          <div class="stat"><b>2–7</b><span data-i18n="studio.s4">{{studio.s4}}</span></div>
+          <div class="stat"><b>0</b><span data-i18n="studio.s5">{{studio.s5}}</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 4. Серія застосунків «Пригоди кота Марка» (герой серії, а не обличчя сайту) ═══ -->
+    <section class="section" id="mark">
+      <div class="section-inner reveal">
+        <p class="series-badge"><span data-i18n="mark.badge">{{mark.badge}}</span></p>
+        <h2 data-i18n="mark.title">{{mark.title}}</h2>
+        <p class="section-lead" data-i18n="mark.lead">{{mark.lead}}</p>
+        <div class="mark-grid">
+[[mark_tiles]]
+        </div>
+        <p class="motto" data-i18n="mark.motto">{{mark.motto}}</p>
+      </div>
+    </section>
+
+    <!-- ═══ 5. Відео ═══ -->
     <section class="section" id="videos" data-cat-section="videos">
       <div class="section-inner reveal">
         <h2 data-i18n="video.title">{{video.title}}</h2>
         <p class="section-lead" data-i18n="video.lead">{{video.lead}}</p>
         <div class="reel" data-chapters='[[chapters_json]]'>
-          <video id="reel-video" muted loop playsinline preload="metadata" poster="assets/video/showreel.jpg">
-            <source src="assets/video/showreel.mp4" type="video/mp4">
+          <video id="reel-video" muted loop playsinline preload="metadata" poster="assets/video/showreel.jpg?v=[[ver]]">
+            <source src="assets/video/showreel.mp4?v=[[ver]]" type="video/mp4">
           </video>
           <div class="reel-label" aria-live="polite"><img src="" alt=""><span></span></div>
           <button class="reel-play" type="button" aria-label="Play / pause">❚❚</button>
@@ -83,7 +115,7 @@
       </div>
     </section>
 
-    <!-- ═══ 4. Картки застосунків ═══ -->
+    <!-- ═══ 6. Картки застосунків ═══ -->
     <section class="section" id="explore" data-cat-section="explore">
       <div class="section-inner reveal">
         <h2 data-i18n="apps.title">{{apps.title}}</h2>
@@ -94,19 +126,7 @@
       </div>
     </section>
 
-    <!-- ═══ 5. Кіт Марк ═══ -->
-    <section class="section" id="mark">
-      <div class="section-inner reveal">
-        <h2 data-i18n="mark.title">{{mark.title}}</h2>
-        <p class="section-lead" data-i18n="mark.lead">{{mark.lead}}</p>
-        <div class="mark-grid">
-[[mark_tiles]]
-        </div>
-        <p class="motto" data-i18n="mark.motto">{{mark.motto}}</p>
-      </div>
-    </section>
-
-    <!-- ═══ 6. Батькам ═══ -->
+    <!-- ═══ 7. Батькам ═══ -->
     <section class="section" id="parents" data-cat-section="parents">
       <div class="section-inner reveal">
         <h2 data-i18n="parents.title">{{parents.title}}</h2>
@@ -122,7 +142,7 @@
       </div>
     </section>
 
-    <!-- ═══ 7. Дітям ═══ -->
+    <!-- ═══ 8. Дітям ═══ -->
     <section class="section" id="kids" data-cat-section="kids">
       <div class="section-inner reveal">
         <h2 data-i18n="kids.title">{{kids.title}}</h2>
@@ -132,24 +152,6 @@
           <div class="kids-item" data-i18n="kids.f2">{{kids.f2}}</div>
           <div class="kids-item" data-i18n="kids.f3">{{kids.f3}}</div>
           <div class="kids-item" data-i18n="kids.f4">{{kids.f4}}</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ 8. Про студію ═══ -->
-    <section class="section" id="studio" data-cat-section="studio">
-      <div class="section-inner reveal studio-box">
-        <div>
-          <h2 data-i18n="studio.title">{{studio.title}}</h2>
-          <p class="section-lead" data-i18n="studio.lead">{{studio.lead}}</p>
-          <p class="studio-text" data-i18n="studio.p1">{{studio.p1}}</p>
-        </div>
-        <div class="stats">
-          <div class="stat"><b data-count="[[app_count]]">[[app_count]]</b><span data-i18n="studio.s1">{{studio.s1}}</span></div>
-          <div class="stat"><b data-count="17">17</b><span data-i18n="studio.s2">{{studio.s2}}</span></div>
-          <div class="stat"><b data-count="30">30</b><span data-i18n="studio.s3">{{studio.s3}}</span></div>
-          <div class="stat"><b data-count="64">64</b><span data-i18n="studio.s4">{{studio.s4}}</span></div>
-          <div class="stat"><b>0</b><span data-i18n="studio.s5">{{studio.s5}}</span></div>
         </div>
       </div>
     </section>
@@ -167,7 +169,7 @@
     <section class="section" id="contact">
       <div class="section-inner section-narrow reveal">
         <div class="cta-box">
-          <img class="cta-mark" src="assets/mark/artist_wow.svg" alt="">
+          <img class="cta-mark cta-octo" src="assets/brand/octo.webp" alt="">
           <h2 data-i18n="contact.title">{{contact.title}}</h2>
           <p data-i18n="contact.lead">{{contact.lead}}</p>
           <a class="btn btn-primary btn-lg" href="mailto:octo.technology.dev@gmail.com" data-i18n="contact.cta">{{contact.cta}}</a>

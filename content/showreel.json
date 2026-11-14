@@ -1,22 +1,31 @@
 [
   {
+    "app": "intro",
+    "t": 0.0,
+    "poster": 1.15
+  },
+  {
     "app": "twomeows",
-    "t": 0.0
+    "t": 2.3
   },
   {
     "app": "marks-garage",
-    "t": 6.2
+    "t": 5.9
   },
   {
     "app": "mark-the-cat",
-    "t": 12.6
+    "t": 12.45
   },
   {
     "app": "marks-art",
-    "t": 19.0
+    "t": 18.0
   },
   {
     "app": "marks-home",
-    "t": 26.9
+    "t": 24.8
+  },
+  {
+    "app": "outro",
+    "t": 31.05
   }
 ]

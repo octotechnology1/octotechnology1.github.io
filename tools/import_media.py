@@ -87,15 +87,7 @@ PEEK = {
     "home_cheer": Path("D:/mark_game/art/mark/mark_cheer.png"),
 }
 
-# Showreel: (source, start s, duration s, pad colour) — joined with soft cross-fades
-FADE = 0.6
-SHOWREEL = [
-    ("twomeows", OCTO / "04_TwoMeows_LinguaStory/video_promo/TwoMeows_promo_v2_UA_16x9.mp4", 3.5, 6.5, "0xCFE3EF"),
-    ("marks-garage", OCTO / "02_Marks_Garage/video_promo/promo.mp4", 5.5, 7.0, "0x6FD2FF"),
-    ("mark-the-cat", OCTO / "03_Kotik_Mark_Workshop/video_promo/promo_en_30s.mp4", 6.0, 7.0, "0xD9F2B4"),
-    ("marks-art", OCTO / "06_Mark_Art_Studio/emulator/game_demo_emulator.mp4", 18.5, 8.5, "0xFFF6E4"),
-    ("marks-home", Path("D:/mark_game/art/shell/demo_splash.mp4"), 1.5, 6.0, "0xF4E9DC"),
-]
+# The showreel (Mark greets, the apps in one device frame, «Powered by» at the end) is made by tools/build_reel.py.
 
 
 def log(*a):
@@ -186,48 +178,16 @@ def import_app(slug, spec, skip_video):
 
 
 def import_peek():
-    log("[assets/mark]")
-    out = ROOT / "assets" / "mark"
-    out.mkdir(parents=True, exist_ok=True)
-    for key, src in PEEK.items():
-        if src.suffix == ".svg":
-            shutil.copy(src, out / f"{key}.svg")
-            log(f"  assets/mark/{key}.svg  {src.stat().st_size // 1024} KB")
-        else:
-            im = Image.open(src).convert("RGBA")
-            bbox = im.getbbox()
-            if bbox:
-                im = im.crop(bbox)
-            save_webp(im, out / f"{key}.webp", None, 520)
+    """Марк выглядывает с боков, плитки, 404: единый облик (тёмный контур R25) делает tools/peek_cats.py."""
+    log("[assets/mark] -> tools/peek_cats.py")
+    import peek_cats
+    peek_cats.main()
 
 
 def build_showreel():
-    log("[assets/video/showreel.mp4]")
-    out = ROOT / "assets" / "video" / "showreel.mp4"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    cmd = ["ffmpeg", "-v", "error", "-y"]
-    for _, src, start, dur, _ in SHOWREEL:
-        cmd += ["-ss", str(start), "-t", str(dur), "-i", str(src)]
-    parts = []
-    for i, (_, _, _, _, pad) in enumerate(SHOWREEL):
-        parts.append(
-            f"[{i}:v]setpts=PTS-STARTPTS,fps=30,scale=1280:720:force_original_aspect_ratio=decrease,"
-            f"pad=1280:720:(ow-iw)/2:(oh-ih)/2:color={pad},setsar=1,format=yuv420p[v{i}]")
-    prev, t, chapters = "v0", 0.0, [{"app": SHOWREEL[0][0], "t": 0.0}]
-    for i in range(1, len(SHOWREEL)):
-        t += SHOWREEL[i - 1][3] - FADE
-        label = f"x{i}"
-        parts.append(f"[{prev}][v{i}]xfade=transition=fade:duration={FADE}:offset={t:.3f}[{label}]")
-        chapters.append({"app": SHOWREEL[i][0], "t": round(t + FADE / 2, 2)})
-        prev = label
-    cmd += ["-filter_complex", ";".join(parts), "-map", f"[{prev}]", "-an",
-            "-c:v", "libx264", "-preset", "slow", "-crf", "28", "-pix_fmt", "yuv420p",
-            "-movflags", "+faststart", str(out)]
-    run(cmd)
-    run(["ffmpeg", "-v", "error", "-y", "-ss", "2", "-i", str(out), "-frames:v", "1", "-q:v", "4",
-         str(out.with_suffix(".jpg"))])
-    (ROOT / "content" / "showreel.json").write_text(json.dumps(chapters, indent=2), encoding="utf-8")
-    log(f"  {out.relative_to(ROOT)}  {out.stat().st_size // 1024} KB, chapters: {chapters}")
+    log("[assets/video/showreel.mp4] -> tools/build_reel.py")
+    import build_reel
+    build_reel.main([])
 
 
 def main():

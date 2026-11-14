@@ -1,8 +1,14 @@
-# OctoTechnology — сайт студії 🐙🐱
+# OctoTechnology — сайт студії 🐙
 
-Сайт студії дитячих застосунків **OctoTechnology**: усі застосунки з котом Марком, відео,
-сторінка кожного застосунку та політики конфіденційності для Android і iOS.
-Стиль — як у сайту TwoMeows (небо, хмаринки, Марк визирає з боків), мови — EN / UK / RU / SK.
+Сайт студії дитячих застосунків **OctoTechnology**: застосунки студії, відео, сторінка кожного застосунку
+та політики конфіденційності для Android і iOS. Мови — EN / UK / RU / SK.
+
+**Бренд-архітектура: студія → серії → застосунки.** Обличчя сайту — студія і її символ, восьминіг (шапка, hero,
+«Про студію», «Батькам», підвал, 404, мета-теги). Кіт Марк — герой першої серії застосунків «Пригоди кота Марка»:
+у нього своя секція `#mark` з підписом «Серія застосунків», він визирає з боків лише в секціях про його застосунки
+(полиця, відео, картки), а на сторінках застосунків серії над назвою стоїть посилання на серію.
+Загальні обіцянки й цифри — від імені студії, не одного героя. Наступні застосунки без кота не ламають сайт:
+у їхньому JSON `"line"` не `"mark"` — тоді на сторінці немає ні кота, ні підпису серії.
 
 План хостингу: GitHub Pages, репозиторій `octotechnology1/octotechnology1.github.io` →
 **https://octotechnology1.github.io/** (адреса задана в `tools/build.py`, константа `SITE_URL`).
@@ -14,7 +20,8 @@
 
 ```
 python tools/build.py              # зібрати сайт (потрібен beautifulsoup4)
-python -m http.server 8090         # подивитися локально: http://localhost:8090/
+python .claude/serve.py 8090       # подивитися локально: http://localhost:8090/ (з Range — відео перемотується;
+                                   # python -m http.server цього не вміє)
 ```
 
 ## Структура
@@ -23,15 +30,19 @@ python -m http.server 8090         # подивитися локально: http
 content/site/<lang>.json      тексти головної та спільні підписи (en, uk, ru, sk)
 content/apps/<slug>.json      один файл на застосунок: статус, посилання, кольори, тексти 4 мовами
 content/policies/*.html       ОРИГІНАЛИ політик (копії зі старих місць) — текст переноситься дослівно
-content/showreel.json         розділи шоуріла (створює import_media.py)
+content/showreel.json         розділи шоуріла: intro, застосунки, outro (створює tools/build_reel.py)
 apps/<slug>/media/            іконка, обкладинка, скриншоти, трейлер (створює import_media.py)
-assets/brand/                 логотип-восьминіг (тимчасовий, до 3D-логотипа), og-cover.jpg
+assets/brand/                 3D-логотип і восьминіг, фавіконки, маніфест, og-cover.jpg (з набору 07_OctoTechnology_Logo, `python tools/brand.py`)
 assets/mark/                  пози Марка, що визирає з боків
-assets/video/showreel.mp4     ролик з усіх застосунків
+assets/video/showreel.mp4     ролик з усіх застосунків (+ showreel.jpg — постер: Марк махає лапою)
 tools/build.py                збирає сторінки й lang/*.json, перевіряє текст політик
 tools/import_media.py         копіює й стискає медіа з папок проєктів на D:
 tools/templates/              шаблони сторінок
 tools/og-cover.html, render_og.py   прев'ю для месенджерів
+tools/brand.py                копіює з набору логотипа (D:/Octo_Technology_Dev/07_OctoTechnology_Logo/final) іконки, восьминога і анімацію (--intro swim|dot)
+tools/build_reel.py          шоуріл: Марк визирає й махає, усі застосунки в одній рамці телефона на небі сайту, «Powered by» в кінці
+tools/render_svgs.mjs        растеризує SVG пачкою (кадри Марка для шоуріла; resvg з D:/Marks_art_studio/tools/assetgen)
+tools/peek_cats.py            усі картинки Марка на сайті в одному вигляді: темний контур #22181A (рішення R25), однакова висота
 ```
 
 Згенеровані файли: `index.html`, `404.html`, `privacy/index.html`, `apps/<slug>/index.html`,
@@ -66,7 +77,9 @@ Marketing URL (необов'язковий) = сторінка застосун�
 1. `content/apps/<slug>.json` — скопіювати будь-який наявний файл і замінити: `slug`, `order`,
    `status` — Android (`play` · `testing` · `soon` · `dev`), `ios_status` — iOS (`live` · `testing` · `soon` · `dev`),
    `play` + `play_live`, `appstore` + `appstore_live` + `apple_id`, кольори `theme`,
-   `age`, `peek` (поза Марка з `assets/mark/`), `policy` (імена файлів або `null`), `emoji` і тексти 4 мовами.
+   `line` — серія (`"mark"` = «Пригоди кота Марка»: кіт визирає і є посилання на серію; для застосунку без кота —
+   інше значення, напр. `"studio"`), `age`, `peek` (поза Марка з `assets/mark/`, лише для серії `mark`),
+   `policy` (імена файлів або `null`), `emoji` і тексти 4 мовами (`price` — показується і на картці на головній).
 2. У `tools/import_media.py` додати запис у `APPS` (іконка, банер, обкладинка, скриншоти, відео, Марк)
    і, за бажанням, шматок у `SHOWREEL`.
 3. `python tools/import_media.py --only <slug>` (без `--only` — переробить усе й шоурил).
@@ -88,10 +101,18 @@ Smart App Banner (Safari на iPhone/iPad сам показує смужку «�
 
 ## Логотип
 
-`python tools/brand.py` робить `assets/brand/octo.webp`, `octo-anim.webp` (живий восьминіг угорі головної),
-`favicon.png`, `apple-touch-icon.png` з джерел: `E:\рабочий стол\octo\octo.png` і анімації заставки
-`D:\botCryptoAlonnn_MT5ERROR\app\assets\logo.webp`. 3D-версія в Blender готується в
-`D:\Octo_Technology_Dev\07_OctoTechnology_Logo\` — коли буде готова, поміняти шляхи `STATIC`/`ANIM` у скрипті.
+3D-логотип і восьминіг зроблені в Blender: `D:/Octo_Technology_Dev/07_OctoTechnology_Logo/` (там README, сцени та скрипти).
+`python tools/brand.py [--intro swim|dot]` копіює звідти в `assets/brand/`: `octo.webp` (іконка шапки/підвалу), `octo-hero.webp`
+(восьминіг у центрі орбіти: ОДНА нескінченна петля 9,9 с — вітається, потім плаває, і знову; без перемикання файлів
+скриптом — браузер зупиняє анімацію поза екраном і запускає її із затримкою, тож перемикання за таймером давало ривки), `logo-intro.webp` (анімація логотипа, грає один раз у розділі «Студія»), `logo.webp`
+(її останній кадр), фавіконки, `apple-touch-icon-180.png`, `android-chrome-*`, `maskable-512.png`, `site.webmanifest`.
+Варіанти анімації: `swim` (підпливає крізь «O» і обіймає її) та `dot` (вилуплюється з бірюзової точки); обирається прапорцем.
+`python tools/build_reel.py` збирає шоуріл (його також викликає `import_media.py`): кіт Марк (ведучий застосунку «Котик Марк»)
+визирає знизу й махає лапою — логотипа на початку немає; далі кожен застосунок у тій самій рамці телефона на тому самому небі
+(TwoMeows — у двох вертикальних телефонах); кліпи — «сирі» записи гри без промо-написів, тож ролик однаковий для всіх
+чотирьох мов, а назву застосунку показує HTML-підпис над відео (перекладається сайтом); у кінці коротка картка
+«Powered by OctoTechnology», яка тане в небо, тож повтор ролика без стику. Моменти кліпів задаються в `REEL` у скрипті.
+У підвалі кожної сторінки — «© 2026 OctoTechnology» (сайт і є студія, тому без «Powered by»).
 Прев'ю для месенджерів: `python tools/render_og.py`.
 
 ## Тексти й мови

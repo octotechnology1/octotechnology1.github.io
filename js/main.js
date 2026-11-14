@@ -3,6 +3,20 @@
   "use strict";
   var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ── Меню на вузьких екранах: кнопка відкриває панель з пунктами; закривається пунктом, Esc або дотиком поза нею ── */
+  var siteHeader = document.querySelector(".site-header");
+  var navBtn = siteHeader && siteHeader.querySelector(".nav-toggle");
+  if (navBtn) {
+    var setNav = function (open) {
+      siteHeader.classList.toggle("nav-open", open);
+      navBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    navBtn.addEventListener("click", function () { setNav(!siteHeader.classList.contains("nav-open")); });
+    siteHeader.querySelectorAll(".main-nav a").forEach(function (a) { a.addEventListener("click", function () { setNav(false); }); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") setNav(false); });
+    document.addEventListener("click", function (e) { if (!siteHeader.contains(e.target)) setNav(false); });
+  }
+
   /* ── Поява секцій при прокрутці ── */
   if ("IntersectionObserver" in window) {
     var revealObserver = new IntersectionObserver(function (entries) {
@@ -62,6 +76,33 @@
     hero.addEventListener("pointerleave", function () { tilt.style.transform = ""; });
   }
 
+  /* ── Восьминіг у центрі орбіти: один файл-петля («привіт» + плаває, 9,9 с), браузер крутить його сам.
+        Раніше скрипт перемикав два файли за таймером, але браузер зупиняє анімацію поза екраном і запускає її
+        із затримкою після оновлення — перемикання потрапляло на середину руху, і поза стрибала. Тепер перемикань немає.
+        Без руху (prefers-reduced-motion) — статична поза. ── */
+  var octo = document.getElementById("octo-hero");
+  if (octo && reduced) octo.src = "assets/brand/octo.webp";
+
+  /* ── Логотип у розділі «Студія»: анімація грає один раз, коли з'являється на екрані; без руху — статичний кадр ── */
+  var studioLogo = document.getElementById("studio-logo");
+  if (studioLogo && "IntersectionObserver" in window && !reduced) {
+    studioLogo.setAttribute("data-wait", "");
+    var logoStarted = false;
+    var startLogo = function () {
+      if (logoStarted) return;
+      logoStarted = true;
+      var pre = new Image();
+      var go = function () { studioLogo.src = studioLogo.getAttribute("data-anim"); studioLogo.removeAttribute("data-wait"); };
+      pre.onload = go;
+      pre.onerror = function () { studioLogo.removeAttribute("data-wait"); };
+      pre.src = studioLogo.getAttribute("data-anim");
+    };
+    new IntersectionObserver(function (entries, ob) {
+      entries.forEach(function (e) { if (e.isIntersecting) { startLogo(); ob.disconnect(); } });
+    }, { threshold: 0.5 }).observe(studioLogo);
+    setTimeout(function () { if (!logoStarted) studioLogo.removeAttribute("data-wait"); }, 15000);   // запобіжник
+  }
+
   /* ── Шоурил: розділи по застосунках, автозапуск коли видно ── */
   var reel = document.querySelector(".reel");
   if (reel) {
@@ -85,6 +126,8 @@
         labelTxt.setAttribute("data-i18n", "apps." + app + ".name");
         labelTxt.textContent = chip.querySelector("span").textContent;
         label.style.opacity = 1;
+      } else {
+        label.style.opacity = 0;   /* привітання Марка й фінальна картка — без підпису застосунку */
       }
     };
     var onTime = function () {
@@ -110,6 +153,13 @@
       if (chip) labelTxt.textContent = chip.querySelector("span").textContent;
     });
     if (chapters.length) setActive(chapters[0].app);
+    /* Постер — кадр, где Марк уже машет. Первый показ начинаем с него же, иначе при старте Марк исчезает и
+       выпрыгивает снова; со второго круга ролик идёт целиком с начала. */
+    var posterT = chapters.length && chapters[0].poster ? +chapters[0].poster : 0;
+    if (posterT) {
+      var toPoster = function () { if (video.currentTime < 0.05) video.currentTime = posterT; };
+      if (video.readyState >= 1) toPoster(); else video.addEventListener("loadedmetadata", toPoster, { once: true });
+    }
     syncBtn();
     if ("IntersectionObserver" in window && !reduced) {
       new IntersectionObserver(function (entries) {

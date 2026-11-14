@@ -1,6 +1,7 @@
 {
   "slug": "marks-home",
   "order": 5,
+  "line": "mark",
   "status": "dev",
   "play": "https://play.google.com/store/apps/details?id=com.markthecat.home",
   "play_live": false,
@@ -19,7 +20,7 @@
     "en": {
       "name": "Mark's Home",
       "tagline": "“I'm big now — I help!” A cosy game about home",
-      "meta": "🏠 Coming soon · 2–5 years",
+      "meta": "🏠 Home helper · 2–5 years",
       "about1": "A new game in the Mark the Cat family — about home. Tasks light up one by one across the room: dust the toy chest, put the toys away, vacuum the floor, make the bed. A tap on a task opens a close-up mini-game.",
       "about2": "The game is in development right now. Screenshots, videos and store links will appear here soon.",
       "f1t": "Rooms of the house", "f1d": "Kids' room, kitchen, living room, bathroom, yard and garage.",
@@ -34,7 +35,7 @@
     "uk": {
       "name": "Дім Марка",
       "tagline": "«Я вже великий — я допомагаю!» Затишна гра про дім",
-      "meta": "🏠 Незабаром · 2–5 років",
+      "meta": "🏠 Помічник удома · 2–5 років",
       "about1": "Нова гра родини кота Марка — про дім. У кімнаті по черзі загоряються задачі: протерти скриню від пилу, скласти іграшки, пропилососити підлогу, застелити ліжко. Дотик до задачі відкриває міні-гру великим планом.",
       "about2": "Зараз гра в розробці. Незабаром тут з'являться скриншоти, відео й посилання на магазини.",
       "f1t": "Кімнати дому", "f1d": "Дитяча, кухня, вітальня, ванна, двір і гараж.",
@@ -49,7 +50,7 @@
     "ru": {
       "name": "Дом Марка",
       "tagline": "«Я уже большой — я помогаю!» Уютная игра про дом",
-      "meta": "🏠 Скоро · 2–5 лет",
+      "meta": "🏠 Помощник по дому · 2–5 лет",
       "about1": "Новая игра семьи кота Марка — про дом. В комнате по очереди загораются задачи: протереть сундук от пыли, сложить игрушки, пропылесосить пол, заправить кровать. Касание задачи открывает мини-игру крупным планом.",
       "about2": "Сейчас игра в разработке. Скоро здесь появятся скриншоты, видео и ссылки на магазины.",
       "f1t": "Комнаты дома", "f1d": "Детская, кухня, гостиная, ванная, двор и гараж.",
@@ -64,7 +65,7 @@
     "sk": {
       "name": "Markov domček",
       "tagline": "„Už som veľký — pomáham!“ Útulná hra o domove",
-      "meta": "🏠 Čoskoro · 2–5 rokov",
+      "meta": "🏠 Pomocník v domácnosti · 2–5 rokov",
       "about1": "Nová hra z rodiny mačiatka Marka — o domove. V izbe sa postupne rozsvecujú úlohy: utrieť prach z truhlice, upratať hračky, povysávať podlahu, ustlať posteľ. Dotyk na úlohu otvorí minihru zblízka.",
       "about2": "Hra sa práve vyvíja. Čoskoro tu pribudnú snímky obrazovky, videá a odkazy do obchodov.",
       "f1t": "Izby domu", "f1d": "Detská izba, kuchyňa, obývačka, kúpeľňa, dvor a garáž.",
