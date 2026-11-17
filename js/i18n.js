@@ -9,6 +9,13 @@
   var LANGS = ["en", "uk", "ru", "sk"];
   var HTML_LANG = { en: "en", uk: "uk", ru: "ru", sk: "sk" };
   var root = document.documentElement.getAttribute("data-root") || "";
+  // у головної і сторінок застосунків є окремі адреси для кожної мови (/uk/, /ru/, /sk/): текст уже в HTML,
+  // а кнопки мов ведуть на сторінку тією мовою (<link rel="alternate" hreflang>), а не перемикають текст на місці
+  var pageLang = document.documentElement.getAttribute("data-page-lang");
+  function altUrl(lang) {
+    var link = document.querySelector('link[rel="alternate"][hreflang="' + lang + '"]');
+    return link ? link.getAttribute("href") : null;
+  }
   var cache = {};
   var current = DEFAULT_LANG;
 
@@ -71,10 +78,32 @@
   };
 
   document.querySelectorAll(".lang-switch button").forEach(function (b) {
-    b.addEventListener("click", function () { setLang(b.getAttribute("data-lang"), true); });
+    b.addEventListener("click", function () {
+      var lang = b.getAttribute("data-lang");
+      var url = pageLang && altUrl(lang);
+      if (url && lang !== pageLang) {
+        store(STORAGE_KEY, lang);
+        var here = new URL(url, location.href);
+        // локально (і на будь-якому іншому домені) — та сама сторінка тієї мови на поточному сайті
+        location.href = location.origin + here.pathname + location.hash;
+        return;
+      }
+      setLang(lang, true);
+    });
   });
 
-  var start = detect();
+  // сторінка мовою, яку обрали явно (адреса /ru/... тощо): лишаємо її мову, не підміняємо текст
+  var start = pageLang && pageLang !== DEFAULT_LANG ? pageLang : detect();
+  if (pageLang && pageLang !== DEFAULT_LANG) {
+    setLang(pageLang, false);
+    load(DEFAULT_LANG);
+    return;
+  }
+  // англійська сторінка, а відвідувач обрав (або браузер каже) іншу мову — одразу на сторінку тією мовою
+  if (pageLang === DEFAULT_LANG && start !== DEFAULT_LANG && altUrl(start)) {
+    location.replace(location.origin + new URL(altUrl(start), location.href).pathname + location.hash);
+    return;
+  }
   // англійський словник потрібен і для підказок у JS (кнопка «Скопійовано»)
   load(DEFAULT_LANG).then(function () { if (start !== DEFAULT_LANG) setLang(start, false); });
 })();

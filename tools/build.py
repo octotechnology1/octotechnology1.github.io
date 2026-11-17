@@ -6,6 +6,8 @@ Generates:
   index.html, 404.html, privacy/index.html, sitemap.xml, robots.txt
   apps/<slug>/index.html, apps/<slug>/privacy-android.html, apps/<slug>/privacy-ios.html
   lang/en.json, lang/uk.json, lang/ru.json, lang/sk.json
+  <lang>/index.html, <lang>/apps/<slug>/index.html  — the home and app pages with the text already in uk/ru/sk
+                                                     (search engines see every language; hreflang links them)
 
 Content lives in:
   content/site/<lang>.json      — texts of the home page and shared labels
@@ -18,6 +20,7 @@ Needs: Python 3.10+, beautifulsoup4.
 """
 import html
 import json
+import posixpath
 import re
 import sys
 import time
@@ -548,8 +551,111 @@ def build_404(d):
     write("404.html", render(read(TPL / "404.html"), d, v))
 
 
+# ── pages per language (search engines do not run the language switch) ─────
+URL_ATTRS = ("href", "src", "poster", "data-anim", "data-full")
+SKIP_PREFIX = ("http:", "https:", "//", "/", "#", "mailto:", "tel:", "data:", "blob:", "javascript:")
+
+
+def localized_pages(apps):
+    """Pages that get a copy per language: the home page and the app pages (policies stay one page — their text is
+    the original legal text; their header and buttons still switch language in place)."""
+    return ["index.html"] + [f"apps/{a['slug']}/index.html" for a in apps]
+
+
+def page_url(page, lang=DEFAULT):
+    path = page[:-len("index.html")] if page.endswith("index.html") else page
+    return SITE_URL + ("" if lang == DEFAULT else lang + "/") + path
+
+
+def alternates(page):
+    lines = [f'  <link rel="alternate" hreflang="{l}" href="{page_url(page, l)}">' for l in LANGS]
+    lines.append(f'  <link rel="alternate" hreflang="x-default" href="{page_url(page)}">')
+    return "\n".join(lines) + "\n"
+
+
+def add_alternates(page):
+    """hreflang links in the default-language page (right after the canonical link)."""
+    text = read(ROOT / page)
+    text = re.sub(r'\n  <link rel="alternate" hreflang="[^"]+" href="[^"]*">', "", text)
+    text = re.sub(r'(<link rel="canonical" href="[^"]*">\n)', lambda m: m.group(1) + alternates(page), text, count=1)
+    write(page, text)
+
+
+def relink(value, page, lang, local):
+    """A relative link of `page` as seen from `<lang>/page`: links to pages that have a copy in this language stay
+    inside the language folder, everything else (assets, policies, support) points to the one shared file."""
+    if not value or value.startswith(SKIP_PREFIX):
+        return value
+    m = re.match(r"([^?#]*)(.*)", value)
+    path, tail = m.group(1), m.group(2)
+    if not path:
+        return value
+    base = posixpath.dirname(page)
+    target = posixpath.normpath(posixpath.join(base, path))
+    is_dir = path.endswith("/") or target == "."
+    key = "index.html" if target == "." else (target.rstrip("/") + "/index.html" if is_dir else target)
+    if key in local:
+        target = posixpath.join(lang, target) if target != "." else lang
+    new = posixpath.relpath(target, posixpath.join(lang, base) if base else lang)
+    if is_dir and not new.endswith("/"):
+        new += "/"
+    return new + tail
+
+
+def build_localized(dicts, apps):
+    local = set(localized_pages(apps))
+    for page in local:
+        add_alternates(page)
+        src = read(ROOT / page)
+        for l in LANGS:
+            if l == DEFAULT:
+                continue
+            d = dicts[l]
+            soup = BeautifulSoup(src, "html.parser")
+            for el in soup.select("[data-i18n]"):
+                k = el["data-i18n"]
+                if k in d:
+                    el.string = d[k]
+            for el in soup.select("[data-i18n-html]"):
+                k = el["data-i18n-html"]
+                if k in d:
+                    el.clear()
+                    el.append(BeautifulSoup(d[k], "html.parser"))
+            for el in soup.select("[data-i18n-content]"):
+                k = el["data-i18n-content"]
+                if k in d:
+                    el["content"] = d[k]
+            for el in soup.find_all(True):
+                for a in URL_ATTRS:
+                    if el.has_attr(a):
+                        el[a] = relink(el[a], page, l, local)
+            for m_ in soup.find_all("meta", attrs={"name": "msapplication-config"}):
+                m_["content"] = relink(m_["content"], page, l, local)
+            h = soup.html
+            h["lang"] = l
+            h["data-root"] = posixpath.relpath(".", posixpath.join(l, posixpath.dirname(page))) + "/"
+            h["data-page-lang"] = l
+            title = soup.title.get_text()
+            desc = soup.find("meta", attrs={"name": "description"})
+            for prop, val in (("og:title", title), ("og:description", desc["content"] if desc else ""),
+                              ("og:url", page_url(page, l))):
+                m_ = soup.find("meta", attrs={"property": prop})
+                if m_:
+                    m_["content"] = val
+            soup.find("link", attrs={"rel": "canonical"})["href"] = page_url(page, l)
+            write(posixpath.join(l, page), str(soup))
+    # the default-language pages also say which language they are (the switch does not swap them on load)
+    for page in local:
+        text = read(ROOT / page)
+        if 'data-page-lang=' not in text:
+            write(page, text.replace('<html lang="en" ', f'<html lang="en" data-page-lang="{DEFAULT}" ', 1))
+
+
 def build_sitemap(apps):
     urls = [SITE_URL, SITE_URL + "privacy/"]
+    for l in LANGS:
+        if l != DEFAULT:
+            urls += [page_url(p, l) for p in localized_pages(apps)]
     for a in apps:
         urls.append(SITE_URL + f"apps/{a['slug']}/")
         urls.append(SITE_URL + support_path(a))
@@ -571,6 +677,7 @@ def main():
         build_app(d, a, apps)
     build_privacy_index(d, apps)
     build_404(d)
+    build_localized(dicts, apps)
     build_sitemap(apps)
     print("[build] done")
 

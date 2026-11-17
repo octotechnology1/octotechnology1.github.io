@@ -81,7 +81,7 @@
         із затримкою після оновлення — перемикання потрапляло на середину руху, і поза стрибала. Тепер перемикань немає.
         Без руху (prefers-reduced-motion) — статична поза. ── */
   var octo = document.getElementById("octo-hero");
-  if (octo && reduced) octo.src = "assets/brand/octo.webp";
+  if (octo && reduced) octo.src = (document.documentElement.getAttribute("data-root") || "") + "assets/brand/octo.webp";
 
   /* ── Логотип у розділі «Студія»: анімація грає один раз, коли з'являється на екрані; без руху — статичний кадр ── */
   var studioLogo = document.getElementById("studio-logo");
