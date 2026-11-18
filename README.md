@@ -131,6 +131,13 @@ Smart App Banner (Safari на iPhone/iPad сам показує смужку «�
 Англійська вбудована в HTML (для пошуковиків і без JS), інші мови підвантажуються з `lang/*.json`.
 Мова першого візиту — з браузера; вибір користувача запам'ятовується.
 
+## Свій домен
+
+`python tools/switch_domain.py <домен>` — пробний прогін: покаже, що зміниться (SITE_URL у `tools/build.py`, файл `CNAME`,
+посилання на політику всередині ігор у `D:/Mark's_garage`, `D:/Marks_workshop`, `D:/Marks_art_studio`, `D:/mark_game`)
+і які адреси вписати в Play Console / App Store Connect. З `--write` — записує. Далі `python tools/build.py`, push сайту,
+у налаштуваннях Pages — домен і Enforce HTTPS; в іграх — нова збірка з versionCode +1. DNS: A-записи 185.199.108–111.153, `www` → CNAME `octotechnology1.github.io`.
+
 ## Деплой
 
 ```
