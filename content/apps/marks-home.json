@@ -14,7 +14,7 @@
   "theme": { "a": "#2fa3c7", "b": "#ffe9c9", "ink": "#16627a" },
   "age": "2–5",
   "peek": "home_cheer",
-  "policy": { "android": null, "ios": null },
+  "policy": { "android": "marks-home-android.html", "ios": "marks-home-ios.html" },
   "emoji": ["🏠", "✨", "🧽", "🌅", "📸", "🎁"],
   "text": {
     "en": {

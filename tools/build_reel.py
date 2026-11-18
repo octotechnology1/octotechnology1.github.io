@@ -64,8 +64,12 @@ REEL = [
     {"app": "marks-art", "kind": "land",
      "shots": [(OCTO / "06_Mark_Art_Studio/mockups/alive_demo.mp4", 4.4, 7.4)]},   # colour fill, tick, Mark comes alive (30 fps)
     {"app": "marks-home", "kind": "land",
-     "shots": [(HOME / "living/demo_living.mp4", 68.3, 2.6),    # домик, Марк машет (27 к/с, без пропусков)
-               (HOME / "living/demo_living.mp4", 60.4, 4.6)]},  # Марк прилетает на шаре, конфетти (27 к/с; мытьё пола было 20 к/с)
+     # сам процесс игры (замечание владельца 17.11: домик и шарик ничего не показывали) — детская из shell/demo_full.mp4,
+     # только окна без пропусков кадров (≥ 20 к/с, разрыв ≤ 48 мс)
+     "shots": [(HOME / "shell/demo_full.mp4", 53.0, 2.0),     # пылесос убирает последнюю полосу пыли
+               (HOME / "shell/demo_full.mp4", 65.4, 2.1),     # швабра моет пол, грязь исчезает
+               (HOME / "shell/demo_full.mp4", 78.5, 2.3),     # одеяло расправляется, кровать заправлена
+               (HOME / "shell/demo_full.mp4", 96.4, 2.6)]},   # сухие листья убраны — цветок распускается (≈98 с)
 ]
 
 SKY_TOP, SKY_MID, SKY_LOW = (169, 211, 233), (207, 227, 239), (221, 230, 236)
