@@ -57,6 +57,7 @@ tools/peek_cats.py            усі картинки Марка на сайті
 | Котик Марк | `/apps/mark-the-cat/privacy-android.html` | `/apps/mark-the-cat/privacy-ios.html` | `/apps/mark-the-cat/support.html` |
 | Малювалка Марка | `/apps/marks-art/privacy-android.html` | `/apps/marks-art/privacy-ios.html` | `/apps/marks-art/support.html` |
 | Дім Марка | `/apps/marks-home/privacy-android.html` | `/apps/marks-home/privacy-ios.html` | `/apps/marks-home/support.html` |
+| Поїзди Марка | `/apps/marks-trains/privacy-android.html` | — (iOS ще немає) | `/apps/marks-trains/support.html` |
 
 App Store Connect вимагає для кожного застосунку і Privacy Policy URL, і **Support URL** —
 сторінка `support.html` (пошта з темою листа, керування підписками Apple/Google, повернення коштів, політики).
