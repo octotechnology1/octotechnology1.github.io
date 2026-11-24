@@ -67,6 +67,14 @@ APPS = {
         "video": (Path("D:/mark_game/art/shell/demo_splash.mp4"), 6.5),
         "mark": Path("D:/mark_game/art/mark/mark_wave.png"),
     },
+    "marks-trains": {
+        "icon": Path("D:/Marks_trains/store/google_play/icon_512.png"),
+        "feature": Path("D:/Marks_trains/store/google_play/feature_1024x500.png"),
+        "cover": (Path("D:/Marks_trains/store/google_play/screenshots/tablet_en/01_menu.png"), (700, 100, 2140, 1540)),
+        "shots": sorted(Path("D:/Marks_trains/store/google_play/screenshots/tablet_en").glob("0*.png")),
+        "video": None,
+        "mark": Path("D:/Marks_trains/art/mark/engineer_A_wave.png"),
+    },
 }
 
 # Marks that peek from the sides of the home page (key -> source)
@@ -85,6 +93,8 @@ PEEK = {
     "artist_wow": CHAR / "04_Art_Studio_artist/mark_artist_wow.svg",
     "home_wave": Path("D:/mark_game/art/mark/mark_wave.png"),
     "home_cheer": Path("D:/mark_game/art/mark/mark_cheer.png"),
+    "trains_wave": Path("D:/Marks_trains/art/mark/engineer_A_wave.png"),
+    "trains_cheer": Path("D:/Marks_trains/art/mark/engineer_A_cheer.png"),
 }
 
 # The showreel (Mark greets, the apps in one device frame, «Powered by» at the end) is made by tools/build_reel.py.

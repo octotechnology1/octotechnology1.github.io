@@ -310,6 +310,7 @@ MARK_ROLES = [  # (image, text key prefix, app slug)
     ("assets/mark/host_fly.webp", "mark.r3", "mark-the-cat"),
     ("assets/mark/artist_hello.webp", "mark.r4", "marks-art"),
     ("assets/mark/home_cheer.webp", "mark.r5", "marks-home"),
+    ("assets/mark/trains_cheer.webp", "mark.r6", "marks-trains"),
 ]
 
 

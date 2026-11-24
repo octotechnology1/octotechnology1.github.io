@@ -48,6 +48,8 @@ CATS = {
     "artist_wow": (CHAR / "04_Art_Studio_artist/mark_artist_wow.svg", False, "assets/mark/artist_wow.webp"),
     "home_wave": (Path("D:/mark_game/art/mark/mark_wave.png"), False, "assets/mark/home_wave.webp"),
     "home_cheer": (Path("D:/mark_game/art/mark/mark_cheer.png"), False, "assets/mark/home_cheer.webp"),
+    "trains_wave": (Path("D:/Marks_trains/art/mark/engineer_A_wave.png"), False, "assets/mark/trains_wave.webp"),
+    "trains_cheer": (Path("D:/Marks_trains/art/mark/engineer_A_cheer.png"), False, "assets/mark/trains_cheer.webp"),
     # плитка «Марк в TwoMeows» в разделе про Марка
     "tile_twomeows": (CHAR / "01_TwoMeows_original_teacher/svg/png/mark_linguastory_cheer.png", True,
                       "apps/twomeows/media/mark.webp"),

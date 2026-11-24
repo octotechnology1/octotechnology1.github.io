@@ -27,13 +27,14 @@ APP_LINKS = [
     ("D:/Marks_art_studio", "composeApp/src/androidMain/kotlin/com/markthecat/coloring/BillingShop.kt", "apps/marks-art/privacy-android.html"),
     ("D:/Marks_art_studio", "iosApp/iosApp/StoreKitShop.swift", "apps/marks-art/privacy-ios.html"),
     ("D:/mark_game", "composeApp/src/androidMain/kotlin/com/markthecat/home/BillingShop.kt", "apps/marks-home/privacy-android.html"),
+    ("D:/Marks_trains", "composeApp/src/androidMain/kotlin/com/markthecat/trains/BillingShop.kt", "apps/marks-trains/privacy-android.html"),
 ]
 # любая прежняя ссылка на политику: старый сайт twomeows.github.io/<игра>/privacy*.html или этот сайт до домена
 OLD_POLICY = re.compile(r'https://(?:twomeows\.github\.io/[a-z]+|octotechnology1\.github\.io/apps/[a-z-]+)/privacy[a-z-]*\.html')
 
 STORE_FIELDS = [
     ("Mark's Garage", "marks-garage"), ("Mark the Cat", "mark-the-cat"), ("Mark's Art", "marks-art"),
-    ("Mark's Home", "marks-home"), ("TwoMeows / LinguaStory", "twomeows"),
+    ("Mark's Home", "marks-home"), ("Mark's Trains", "marks-trains"), ("TwoMeows / LinguaStory", "twomeows"),
 ]
 
 

@@ -1,0 +1,38 @@
+{
+  "shots": [
+    {
+      "file": "shot_01.webp",
+      "portrait": false
+    },
+    {
+      "file": "shot_02.webp",
+      "portrait": false
+    },
+    {
+      "file": "shot_03.webp",
+      "portrait": false
+    },
+    {
+      "file": "shot_04.webp",
+      "portrait": false
+    },
+    {
+      "file": "shot_05.webp",
+      "portrait": false
+    },
+    {
+      "file": "shot_06.webp",
+      "portrait": false
+    },
+    {
+      "file": "shot_07.webp",
+      "portrait": false
+    },
+    {
+      "file": "shot_08.webp",
+      "portrait": false
+    }
+  ],
+  "mark": "mark.webp",
+  "video": null
+}
