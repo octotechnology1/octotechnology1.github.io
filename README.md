@@ -146,3 +146,19 @@ git add -A && git commit -m "update site" && git push
 ```
 
 GitHub Pages: гілка `main`, корінь. Пуш — від акаунта `octotechnology1`.
+
+## Промо-ролики приложений (как обновить)
+
+`apps/<slug>/media/promo.mp4` — только сжатые копии (1280×720, crf 27) готовых роликов; сами ролики, их кадры
+и инструкции — в репозиториях приложений:
+
+| Сайт | Исходник ролика | Инструкция |
+|---|---|---|
+| `marks-trains` | `D:/Marks_trains/store/google_play/promo_en_30s.mp4` | `D:/Marks_trains/tools/promo/README.md` |
+| `marks-garage` | `D:/Octo_Technology_Dev/02_Marks_Garage/video_promo/promo.mp4` (= `D:/Mark's_garage/tools/promo/final/promo_en_30s.mp4`) | `D:/Mark's_garage/tools/promo/README.md` |
+| `mark-the-cat` | `D:/Octo_Technology_Dev/03_Kotik_Mark_Workshop/video_promo/promo_en_30s.mp4` | `D:/Marks_workshop/tools/promo/README.md` |
+| `twomeows` | `D:/Octo_Technology_Dev/04_TwoMeows_LinguaStory/video_promo/TwoMeows_promo_v2_UA_16x9.mp4` | `D:/Spik_for_baby/video_project/README.md` |
+
+Финальный кадр этих четырёх роликов — «Google Play + App Store». У `marks-art` и `marks-home` на сайте — демо без
+кадра с магазинами. После пересборки ролика: `python tools/import_media.py --only <slug>` (переделает и картинки
+приложения) или только видео тем же ffmpeg, что в `video_web()`; затем коммит и `git push origin HEAD:main`.
