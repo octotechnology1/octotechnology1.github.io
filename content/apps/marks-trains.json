@@ -20,7 +20,7 @@
   "peek": "trains_wave",
   "policy": {
     "android": "marks-trains-android.html",
-    "ios": null
+    "ios": "marks-trains-ios.html"
   },
   "emoji": [
     "🚂",
