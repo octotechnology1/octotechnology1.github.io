@@ -69,7 +69,7 @@ APPS = {
     },
     "marks-trains": {
         "icon": Path("D:/Marks_trains/store/google_play/icon_512.png"),
-        "feature": Path("D:/Marks_trains/store/google_play/feature_1024x500.png"),
+        "feature": Path("D:/Marks_trains/store/google_play/feature_en_1024x500.png"),
         "cover": (Path("D:/Marks_trains/store/google_play/screenshots/tablet_en/01_menu.png"), (700, 100, 2140, 1540)),
         "shots": sorted(Path("D:/Marks_trains/store/google_play/screenshots/tablet_en").glob("0*.png")),
         "video": (Path("D:/Marks_trains/store/google_play/promo_en_30s.mp4"), 27.0),
